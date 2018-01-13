@@ -70,7 +70,6 @@ defmodule PlugStaticPlus do
       )
       when meth in @allowed_methods do
     segments = subset(at, conn.path_info)
-    IO.inspect segments
     if allowed?(only, prefix, segments) do
       segments = Enum.map(segments, &uri_decode/1)
 
@@ -81,7 +80,7 @@ defmodule PlugStaticPlus do
       path = path(from, segments)
       range = get_req_header(conn, "range")
       encoding = file_encoding(conn, path, index, range, gzip?, brotli?)
-      serve_static(encoding, segments, range, options)
+      serve_static(encoding, range, options)
     else
       conn
     end
@@ -106,7 +105,7 @@ defmodule PlugStaticPlus do
     h in only or match?({0, _}, prefix != [] and :binary.match(h, prefix))
   end
 
-  defp serve_static({:ok, conn, file_info, path}, segments, range, options) do
+  defp serve_static({:ok, conn, file_info, path}, range, options) do
     %{
       qs_cache: qs_cache,
       et_cache: et_cache,
@@ -136,7 +135,7 @@ defmodule PlugStaticPlus do
         |> halt()
     end
   end
-  defp serve_static({:error, conn}, _segments, _range, _options) do
+  defp serve_static({:error, conn}, _range, _options) do
     conn
   end
 
@@ -275,8 +274,7 @@ defmodule PlugStaticPlus do
     nil
   end
   defp fallback_file_info(path, [try | t]) do
-    path = Enum.join([path, try], "/")
-    case regular_file_info(path, false) do
+    case regular_file_info(Enum.join([path, try], "/"), false) do
       nil -> fallback_file_info(path, t)
       file_info -> file_info
     end
