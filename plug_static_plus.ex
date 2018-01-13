@@ -121,7 +121,7 @@ defmodule PlugStaticPlus do
         filename =
           case String.split(path, ["/"]) do
             [] -> ""
-            Parts -> List.last(Parts)
+            parts -> List.last(parts)
           end
         content_type = Map.get(types, filename) || MIME.from_path(filename)
         conn
