@@ -8,7 +8,7 @@ See the original plug for the full documentation: [plug/static.ex](https://githu
     The index files can be specified by using the :index option with either a list of strings or a single string. The default is `["index.html", "index.htm", "index.js", "index.json"]`
   * Files can be served from the "/" directory. Will respect index definitions.
 
-![Example](https://image.prntscr.com/image/sEUWelq9S9qJinBZxv9ZUA.png)
+![Example](https://image.prntscr.com/image/VoSRzbL3SRSTkhw90VJhuQ.png)
 
 ## License
 
